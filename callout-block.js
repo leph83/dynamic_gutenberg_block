@@ -6,7 +6,8 @@ wp.blocks.registerBlockType( 'jsforwp/callout-block', {
 
     attributes: {
 		content: {
-			source: 'html',
+            type: 'string',
+			source: 'h2',
 			selector: 'h2',
         },
         backgroundColor: {
