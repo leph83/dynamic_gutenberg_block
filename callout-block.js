@@ -1,78 +1,124 @@
-wp.blocks.registerBlockType( 'wtp/callout-block', {
+( function( blocks, editor, i18n, element, components, _ ) {
+    var el = element.createElement;
+    var RichText = editor.RichText;
+    var MediaUpload = editor.MediaUpload;
 
-    title: 'Callout Block',
-    icon: 'megaphone',
-    category: 'common',
+    blocks.registerBlockType( 'wtp/callout-block', {
+        title: i18n.__( 'Example: Recipe Card', 'wtp' ),
+        icon: 'index-card',
+        category: 'common',
 
-    attributes: {
-		content: {
-            type: 'string',
-			selector: 'h2',
-        },
-        backgroundColor: {
-            type: 'string',
-            default: '#900900',
-        },
-        textColor: {
-            type: 'string',
-            default: '#ffffff',
-        },
-        title: {
-            type: 'string',
-            default: 'title',
-        }
-	},
+        attributes: {
+            mediaID: {
+                type: 'number',
+            },
+            mediaURL: {
+                type: 'string',
+                source: 'attribute',
+                selector: 'img',
+                attribute: 'src',
+            },
+            title: {
+                type: 'string',
+                selector: 'h2',
+            },
+            subtitle: {
+                type: 'string',
+                selector: 'h3',
+            },
 
-	edit: function( props ) {
-		return wp.element.createElement( 
-            wp.element.Fragment, 
-            null, 
-            // inspector
-            wp.element.createElement(
-                wp.editor.InspectorControls, 
-                null,
-                wp.element.createElement(
-                    wp.editor.PanelColorSettings, {
-                        title: wp.i18n.__("Color Settings", "wtp"),
-                        colorSettings: [
-                            {
-                                label: wp.i18n.__("Background Color", "wtp"),
-                                value: props.attributes.backgroundColor,
-                                onChange: function( newBackgroundColor ) {
-                                    props.setAttributes({ backgroundColor: newBackgroundColor });
-                                }
-                            },
-                            {
-                                label: wp.i18n.__("Text Color", "wtp"),
-                                value: props.attributes.textColor,
-                                onChange: function( newColor ) {
-                                    props.setAttributes({ textColor: newColor });
-                                }
-                            },
-                        ]
-                    }
+            ingredients: {
+                type: 'array',
+                source: 'children',
+                selector: '.ingredients',
+            },
+            instructions: {
+                type: 'array',
+                source: 'children',
+                selector: '.steps',
+            },
+        },
+        edit: function( props ) {
+            var attributes = props.attributes;
+
+            var onSelectImage = function( media ) {
+                return props.setAttributes( {
+                    mediaURL: media.url,
+                    mediaID: media.id,
+                } );
+            };
+
+            return (
+                el( 'div', { className: props.className },
+                    el( 'div', { className: 'recipe-image' },
+                        el( MediaUpload, {
+                            onSelect: onSelectImage,
+                            allowedTypes: 'image',
+                            value: attributes.mediaID,
+                            render: function( obj ) {
+                                return el( components.Button, {
+                                        className: attributes.mediaID ? 'image-button' : 'button button-large',
+                                        onClick: obj.open
+                                    },
+                                    ! attributes.mediaID ? i18n.__( 'Upload Image', 'wtp' ) : el( 'img', { src: attributes.mediaURL } )
+                                );
+                            }
+                        } )
+                    ),
+                    el( RichText, {
+                        tagName: 'h2',
+                        inline: true,
+                        placeholder: i18n.__( 'write title…', 'wtp' ),
+                        value: attributes.title,
+                        onChange: function( value ) {
+                            props.setAttributes( { title: value } );
+                        },
+                    } ),
+                    el( RichText, {
+                        tagName: 'h3',
+                        inline: true,
+                        placeholder: i18n.__( 'write subtitle…', 'wtp' ),
+                        value: attributes.subtitle,
+                        onChange: function( value ) {
+                            props.setAttributes( { subtitle: value } );
+                        },
+                    } ),
+                    el( 'h3', {}, i18n.__( 'Ingredients', 'wtp' ) ),
+                    el( RichText, {
+                        tagName: 'ul',
+                        multiline: 'li',
+                        placeholder: i18n.__( 'Write a list of ingredients…', 'wtp' ),
+                        value: attributes.ingredients,
+                        onChange: function( value ) {
+                            props.setAttributes( { ingredients: value } );
+                        },
+                        className: 'ingredients',
+                    } ),
+                    el( 'h3', {}, i18n.__( 'Instructions', 'wtp' ) ),
+                    el( RichText, {
+                        tagName: 'div',
+                        inline: false,
+                        placeholder: i18n.__( 'Write instructions…', 'wtp' ),
+                        value: attributes.instructions,
+                        onChange: function( value ) {
+                            props.setAttributes( { instructions: value } );
+                        },
+                    } )
                 )
-            ),
-            // edit
-            wp.element.createElement( 
-                wp.editor.RichText, {
-                    tagName: 'h2',
-                    placeholder: 'Enter Title',
-                    className: props.className,
-                    value: props.attributes.content,
-                    style: {
-                        backgroundColor: props.attributes.backgroundColor,
-                        color: props.attributes.textColor
-                    },
-                    onChange: function( newContent ) {
-                        props.setAttributes( { content: newContent } );
-                    }
-                } 
-            ) 
-        );
-	},
+            );
+        },
+        save: function( props ) {
+            var attributes = props.attributes;
 
-	save: function( props ) {
-        return null
-	}
-} );
+            return null
+        },
+    } );
+
+} )(
+    window.wp.blocks,
+    window.wp.editor,
+    window.wp.i18n,
+    window.wp.element,
+    window.wp.components,
+    window._,
+);
