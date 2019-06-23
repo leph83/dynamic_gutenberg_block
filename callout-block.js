@@ -1,4 +1,4 @@
-wp.blocks.registerBlockType( 'jsforwp/callout-block', {
+wp.blocks.registerBlockType( 'wtp/callout-block', {
 
     title: 'Callout Block',
     icon: 'megaphone',
@@ -7,7 +7,6 @@ wp.blocks.registerBlockType( 'jsforwp/callout-block', {
     attributes: {
 		content: {
             type: 'string',
-			source: 'h2',
 			selector: 'h2',
         },
         backgroundColor: {
@@ -28,22 +27,23 @@ wp.blocks.registerBlockType( 'jsforwp/callout-block', {
 		return wp.element.createElement( 
             wp.element.Fragment, 
             null, 
+            // inspector
             wp.element.createElement(
                 wp.editor.InspectorControls, 
                 null,
                 wp.element.createElement(
                     wp.editor.PanelColorSettings, {
-                        title: wp.i18n.__("Color Settings", "jsforwp"),
+                        title: wp.i18n.__("Color Settings", "wtp"),
                         colorSettings: [
                             {
-                                label: wp.i18n.__("Background Color", "jsforwp"),
+                                label: wp.i18n.__("Background Color", "wtp"),
                                 value: props.attributes.backgroundColor,
                                 onChange: function( newBackgroundColor ) {
                                     props.setAttributes({ backgroundColor: newBackgroundColor });
                                 }
                             },
                             {
-                                label: wp.i18n.__("Text Color", "jsforwp"),
+                                label: wp.i18n.__("Text Color", "wtp"),
                                 value: props.attributes.textColor,
                                 onChange: function( newColor ) {
                                     props.setAttributes({ textColor: newColor });
@@ -53,9 +53,11 @@ wp.blocks.registerBlockType( 'jsforwp/callout-block', {
                     }
                 )
             ),
+            // edit
             wp.element.createElement( 
                 wp.editor.RichText, {
                     tagName: 'h2',
+                    placeholder: 'Enter Title',
                     className: props.className,
                     value: props.attributes.content,
                     style: {
