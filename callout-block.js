@@ -14,14 +14,14 @@
         category: 'common', /* can't change that afterwards? */
 
         attributes: {
-            mediaID: {
+            imgID: {
                 type: 'number',
             },
-            mediaURL: {
+            imgURL: {
                 type: 'string',
-                source: 'attribute',
-                selector: 'img',
-                attribute: 'src',
+                // source: 'attribute',
+                // selector: 'img',
+                // attribute: 'src',
             },
             title: {
                 type: 'string',
@@ -45,7 +45,6 @@
                 return props.setAttributes( {
                     imgID: media.id,
                     imgURL: media.url 
-                    
                 } );
             }
             
@@ -90,17 +89,17 @@
                         el( components.TextControl, {
                             type: 'string',
                             label: __( 'Image ID' ),
-                            value: props.attributes.mediaID,
+                            value: props.attributes.imgID,
                             onChange: function( value ) {
-                                props.setAttributes( { mediaID: value } );
+                                props.setAttributes( { imgID: value } );
                             },
                         } ),
                         el( components.TextControl, {
                             type: 'string',
                             label: __( 'Image URL' ),
-                            value: props.attributes.mediaURL,
+                            value: props.attributes.imgURL,
                             onChange: function( value ) {
-                                props.setAttributes( { mediaURL: value } );
+                                props.setAttributes( { imgURL: value } );
                             },
                         } ),
                     ),

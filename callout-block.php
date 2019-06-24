@@ -35,8 +35,8 @@ function wtp_render_callback( $attributes ){
 	$bg_color = $attributes['backgroundColor'] ?? false;
 	$text_color = $attributes['textColor'] ?? false;
     $title = $attributes['title'] ?? false;
-    $mediaID = $attributes['mediaID'] ?? false;
-    $imageSrc = wp_get_attachment_image_src($mediaID)[0] ?? false;
+    $imgID = $attributes['imgID'] ?? false;
+    $imageSrc = wp_get_attachment_image_src($imgID)[0] ?? false;
 
 
     $image = '<img src="'.$imageSrc.'">';
