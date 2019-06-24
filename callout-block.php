@@ -32,19 +32,19 @@ function wtp_register_block_assets() {
 
 
 function wtp_render_callback( $attributes ){
-		$bg_color = $attributes['backgroundColor'] ?? false;
-		$text_color = $attributes['textColor'] ?? false;
-        $title = $attributes['title'] ?? false;
-        $mediaID = $attributes['mediaID'] ?? false;
-        $imageSrc = wp_get_attachment_image_src($mediaID)[0] ?? false;
+	$bg_color = $attributes['backgroundColor'] ?? false;
+	$text_color = $attributes['textColor'] ?? false;
+    $title = $attributes['title'] ?? false;
+    $mediaID = $attributes['mediaID'] ?? false;
+    $imageSrc = wp_get_attachment_image_src($mediaID)[0] ?? false;
 
 
-        $image = '<img src="'.$imageSrc.'">';
+    $image = '<img src="'.$imageSrc.'">';
 
-        return '
-        	<div style="color: '.$text_color.';background-color: '.$bg_color.'">
-        		'.$title.'
-                '.$image.'
-    		</div>
-    	';
-    }
+    return '
+    	<div style="color: '.$text_color.';background-color: '.$bg_color.'">
+    		'.$title.'
+            '.$image.'
+		</div>
+	';
+}
