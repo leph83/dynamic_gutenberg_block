@@ -3,8 +3,10 @@
     var el = element.createElement;
     var __ = i18n.__;
 
-    var RichText = editor.RichText;
+    
     var MediaUpload = editor.MediaUpload;
+
+
 
     blocks.registerBlockType( 'wtp/callout-block', {
         title: __( 'What the Phuc', 'wtp' ),
@@ -39,38 +41,29 @@
             var attributes = props.attributes;
 
             // set onChange functions
-
-            var onSelectImage = function( media ) {
+            var onSelectImage = function (media) {
                 return props.setAttributes( {
-                    mediaURL: media.url,
-                    mediaID: media.id,
+                    imgID: media.id,
+                    imgURL: media.url 
+                    
                 } );
-            };
+            }
+            
+            var onRemoveImage = function (media) {
+                return props.setAttributes( {
+                    imgURL: null, 
+                    imgID: null 
+                }); 
+            }
+
+            // var onSelectImage = function( media ) {
+            //     return props.setAttributes( {
+            //         mediaURL: media.url,
+            //         mediaID: media.id,
+            //     } );
+            // };
 
             return [
-                // inspector
-                // el( editor.InspectorControls, { key: 'inspector' },
-                //     el(editor.PanelColorSettings, {
-                //             title: __("Color Settings", "wtp"),
-                //             colorSettings: [
-                //                 {
-                //                     label: __("Background Color", "wtp"),
-                //                     value: props.attributes.backgroundColor,
-                //                     onChange: function( newBackgroundColor ) {
-                //                         props.setAttributes({ backgroundColor: newBackgroundColor });
-                //                     }
-                //                 },
-                //                 {
-                //                     label: __("Text Color", "wtp"),
-                //                     value: props.attributes.textColor,
-                //                     onChange: function( newColor ) {
-                //                         props.setAttributes({ textColor: newColor });
-                //                     }
-                //                 },
-                //             ]
-                //         }
-                //     )
-                // ),
                 // INSPECTOR
                 el( editor.InspectorControls, { key: 'inspector' }, 
                     el( 
@@ -114,41 +107,87 @@
                 ),              
                 // build editor html
                 el( 'div', { className: props.className },
-                    el( 'div', { className: 'recipe-image' },
-                        el( MediaUpload, {
+                    // el( editor.MediaUploadCheck , {},
+                        // el( editor.MediaUpload, {
+                        //     type: 'image',
+                        //     className: 'block__image',
+                        //     value: props.attributes.imgID,
+                        //     onSelect: onSelectImage,
+                            // render: function( obj ) {
+                            //     return  el( 'div', {} ,
+                            //         el( components.IconButton, {
+                            //             style: {padding: '4px'},
+                            //             className: props.attributes.imgID ? 'nen-button image-button' : 'button nen-button button-large',
+                            //             onClick: obj.open },
+                            //             ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
+                            //         ),
+                            //         ( props.attributes.imgID ? 
+                            //             el( Fragment , {} ,
+                            //                 el( 
+                            //                     components.Button, 
+                            //                     {
+                            //                         style: { marginRight: '8px' ,  marginTop: '4px' , marginBottom: '8px' , position: 'relative' },
+                            //                         isDefault: true,
+                            //                         onClick: obj.open
+                            //                     },
+                            //                     __( 'edit' , 'wtp' )
+                            //                 ),
+                            //                 el( 
+                            //                     components.Button, 
+                            //                     {
+                            //                         style: { marginRight: '8px' , marginTop: '4px' , marginBottom: '8px' ,  position: 'relative' },
+                            //                         isDefault: true,
+                            //                         onClick: onRemoveImage 
+                            //                     },
+                            //                     __( 'remove' , 'wtp' )
+                            //                 )
+                            //             )
+                            //     : null )
+                            //     );
+                            // }, 
+                        // }
+                    // ),
+                    el( 
+                        editor.MediaUpload, {
+                            type: 'image',
+                            value: props.attributes.imgID,
                             onSelect: onSelectImage,
-                            allowedTypes: 'image',
-                            value: attributes.mediaID,
                             render: function( obj ) {
-                                return el( components.Button, {
-                                        className: attributes.mediaID ? 'image-button' : 'button button-large',
-                                        onClick: obj.open
-                                    },
-                                    ! attributes.mediaID ? __( 'Upload Image', 'wtp' ) : el( 'img', { src: attributes.mediaURL } )
+                                return  el( 'div', {} ,
+                                    el( components.IconButton, {
+                                        style: {padding: '4px'},
+                                        className: props.attributes.imgID ? 'nen-button image-button' : 'button nen-button button-large',
+                                        onClick: obj.open },
+                                        ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
+                                    ),
                                 );
                             }
-                        } )
+                        }
                     ),
-                    el( RichText, {
-                        tagName: 'h2',
-                        inline: true,
-                        placeholder: __( 'title…', 'wtp' ),
-                        className: 'block__title',
-                        value: attributes.title,
-                        onChange: function( value ) {
-                            props.setAttributes( { title: value } );
-                        },
-                    } ),
-                    el( RichText, {
-                        tagName: 'h3',
-                        inline: true,
-                        placeholder: __( 'subtitle…', 'wtp' ),
-                        value: attributes.subtitle,
-                        onChange: function( value ) {
-                            props.setAttributes( { subtitle: value } );
-                        },
-                    } )
-                    // el( RichText, {
+                    el( 
+                        editor.RichText, {
+                            tagName: 'h2',
+                            inline: true,
+                            placeholder: __( 'title…', 'wtp' ),
+                            className: 'block__title',
+                            value: attributes.title,
+                            onChange: function( value ) {
+                                props.setAttributes( { title: value } );
+                            },
+                        } 
+                    ),
+                    el( 
+                        editor.RichText, {
+                            tagName: 'h3',
+                            inline: true,
+                            placeholder: __( 'subtitle…', 'wtp' ),
+                            value: attributes.subtitle,
+                            onChange: function( value ) {
+                                props.setAttributes( { subtitle: value } );
+                            },
+                        }
+                    )
+                    // el( editor.RichText, {
                     //     tagName: 'ul',
                     //     multiline: 'li',
                     //     placeholder: __( 'Write a list of ingredients…', 'wtp' ),
