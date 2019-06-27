@@ -12,16 +12,16 @@ add_action('init', 'wtp_register_block_assets');
 
 function wtp_register_block_assets() {
 
-	$block_path = '/callout-block.js';
+	$block_path = '/block.js';
 	wp_register_script(
-		'wtp-callout-block',
+		'wtp-default-block',
 		plugins_url( $block_path , __FILE__ ),
 		[ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ],
 		filemtime( plugin_dir_path( $block_path , __FILE__ ) )
 	);
 
-    register_block_type( 'wtp/callout-block', array(
-		'editor_script' => 'wtp-callout-block',
+    register_block_type( 'wtp/default-block', array(
+		'editor_script' => 'wtp-default-block',
 		'render_callback' => 'wtp_render_callback',
 	) );
 }

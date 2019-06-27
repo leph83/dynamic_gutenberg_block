@@ -9,7 +9,7 @@
 
 
     blocks.registerBlockType( 'wtp/callout-block', {
-        title: __( 'What the Phuc', 'wtp' ),
+        title: __( 'wtp block', 'wtp' ),
         icon: 'carrot',
         category: 'common', /* can't change that afterwards? */
 
