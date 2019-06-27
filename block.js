@@ -26,7 +26,7 @@
             },
             subtitle: {
                 type: 'string',
-                selector: 'h3',
+                selector: '.block__subtitle',
             },
             ingredients: {
                 type: 'array',
@@ -67,49 +67,7 @@
                             title: __( 'Media' ),
                             initialOpen: true,
                         },
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Image ID' ),
-                            value: props.attributes.imgID,
-                            onChange: function( value ) {
-                                props.setAttributes( { imgID: value } );
-                            },
-                        } ),
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Image URL' ),
-                            value: props.attributes.imgURL,
-                            onChange: function( value ) {
-                                props.setAttributes( { imgURL: value } );
-                            },
-                        } ),
-                    ),
-                    // text
-                    el( components.PanelBody, {
-                            title: __( 'Text' ),
-                            initialOpen: true,
-                        },
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Title' ),
-                            value: props.attributes.title,
-                            onChange: function( value ) {
-                                props.setAttributes( { title: value } );
-                            },
-                        } ),
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Subtitle' ),
-                            value: props.attributes.subtitle,
-                            onChange: function( value ) {
-                                props.setAttributes( { subtitle: value } );
-                            },
-                        } ),
-                    ),
-                ),              
-                // build editor html
-                el( 'div', { className: props.className },
-                    el( 
+                        el( 
                         editor.MediaUpload, {
                             type: 'image',
                             value: props.attributes.imgID,
@@ -151,7 +109,51 @@
                             }
                         }
                     ),
+                    ),
+                    // text
+                    el( components.PanelBody, {
+                            title: __( 'Text' ),
+                            initialOpen: false,
+                        },
+                        el( components.TextControl, {
+                            type: 'string',
+                            label: __( 'Title' ),
+                            value: props.attributes.title,
+                            onChange: function( value ) {
+                                props.setAttributes( { title: value } );
+                            },
+                        } ),
+                        el( components.TextControl, {
+                            type: 'string',
+                            label: __( 'Subtitle' ),
+                            value: props.attributes.subtitle,
+                            onChange: function( value ) {
+                                props.setAttributes( { subtitle: value } );
+                            },
+                        } ),
+                    ),
+                ),              
+                // build editor html
+                el( 'div', { className: props.className },
                     el( 
+                        editor.MediaUpload, {
+                            type: 'image',
+                            value: props.attributes.imgID,
+                            onSelect: onSelectImage,
+                            render: function( obj ) {
+                                return  el( 'div', {} ,
+                                    el( 
+                                        components.Button, {
+                                        style: { padding: '0' },
+                                        className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
+                                        onClick: obj.open },
+                                        ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
+                                    )
+                                );
+                            }
+                        }
+                    ),
+                    el(
                         editor.RichText, {
                             tagName: 'h2',
                             inline: true,
@@ -163,10 +165,11 @@
                             },
                         } 
                     ),
-                    el( 
+                    el(
                         editor.RichText, {
                             tagName: 'h3',
                             inline: true,
+                            className: 'block__subtitle',
                             placeholder: __( 'subtitle…', 'wtp' ),
                             value: attributes.subtitle,
                             onChange: function( value ) {
