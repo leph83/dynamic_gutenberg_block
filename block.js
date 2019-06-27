@@ -36,6 +36,7 @@
                 selector: '.block__subtitle',
             }
         },
+
         edit: function( props ) {
             var attributes = props.attributes;
 
@@ -56,14 +57,19 @@
 
             return [
                 // INSPECTOR
-                el( editor.InspectorControls, { key: 'inspector' }, 
+                el( 
+                    editor.InspectorControls, 
+                    { key: 'inspector' }, 
                     // image or media
-                    el( components.PanelBody, {
+                    el( 
+                        components.PanelBody, 
+                        {
                             title: __( 'Media' ),
                             initialOpen: true,
                         },
                         el( 
-                            editor.MediaUpload, {
+                            editor.MediaUpload, 
+                            {
                                 type: 'image',
                                 value: props.attributes.imgID,
                                 onSelect: onSelectImage,
@@ -107,11 +113,13 @@
                     ),
                     // text
                     el( 
-                        components.PanelBody, {
+                        components.PanelBody, 
+                        {
                             title: __( 'Text' ),
                             initialOpen: false,
                         },
-                        el( components.TextControl, {
+                        el( components.TextControl, 
+                        {
                             type: 'string',
                             label: __( 'Title' ),
                             value: props.attributes.title,
@@ -119,7 +127,8 @@
                                 props.setAttributes( { title: value } );
                             },
                         } ),
-                        el( components.TextControl, {
+                        el( components.TextControl, 
+                        {
                             type: 'string',
                             label: __( 'Subtitle' ),
                             value: props.attributes.subtitle,
@@ -130,9 +139,12 @@
                     ),
                 ),              
                 // build editor html
-                el( 'div', { className: props.className },
+                el( 
+                    'div', 
+                    { className: props.className },
                     el( 
-                        editor.MediaUpload, {
+                        editor.MediaUpload, 
+                        {
                             type: 'image',
                             value: props.attributes.imgID,
                             onSelect: onSelectImage,
@@ -150,7 +162,8 @@
                         }
                     ),
                     el(
-                        editor.RichText, {
+                        editor.RichText, 
+                        {
                             tagName: 'h2',
                             inline: true,
                             className: 'block__title',
@@ -162,7 +175,8 @@
                         } 
                     ),
                     el(
-                        editor.RichText, {
+                        editor.RichText, 
+                        {
                             tagName: 'h3',
                             inline: true,
                             className: 'block__subtitle',
@@ -176,6 +190,7 @@
                 )
             ];
         },
+
         save: function( props ) {
             var attributes = props.attributes;
 
