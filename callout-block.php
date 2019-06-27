@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Callout Block
- * Description: Creates a Gutenberg Block to add a callout component to the page.
- * Author: zgordon, fabiankaegy
- * Author URI: https://javascriptforwp.com
+ * Plugin Name: WTP Blocks
+ * Description: Creates a custom made Gutenberg Block with different styles
+ * Author: Phuc Le
+ * Author URI: https://whatthephuc.com
  * Text Domain: wtp
  * Version: 1.0.0
  */
@@ -24,10 +24,6 @@ function wtp_register_block_assets() {
 		'editor_script' => 'wtp-callout-block',
 		'render_callback' => 'wtp_render_callback',
 	) );
-    
-
-
-
 }
 
 

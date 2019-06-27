@@ -19,9 +19,6 @@
             },
             imgURL: {
                 type: 'string',
-                // source: 'attribute',
-                // selector: 'img',
-                // attribute: 'src',
             },
             title: {
                 type: 'string',
@@ -65,9 +62,31 @@
             return [
                 // INSPECTOR
                 el( editor.InspectorControls, { key: 'inspector' }, 
-                    el( 
-                        components.PanelBody, {
-                            title: __( 'Content' ),
+                    // image or media
+                    el( components.PanelBody, {
+                            title: __( 'Media' ),
+                            initialOpen: true,
+                        },
+                        el( components.TextControl, {
+                            type: 'string',
+                            label: __( 'Image ID' ),
+                            value: props.attributes.imgID,
+                            onChange: function( value ) {
+                                props.setAttributes( { imgID: value } );
+                            },
+                        } ),
+                        el( components.TextControl, {
+                            type: 'string',
+                            label: __( 'Image URL' ),
+                            value: props.attributes.imgURL,
+                            onChange: function( value ) {
+                                props.setAttributes( { imgURL: value } );
+                            },
+                        } ),
+                    ),
+                    // text
+                    el( components.PanelBody, {
+                            title: __( 'Text' ),
                             initialOpen: true,
                         },
                         el( components.TextControl, {
@@ -86,66 +105,10 @@
                                 props.setAttributes( { subtitle: value } );
                             },
                         } ),
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Image ID' ),
-                            value: props.attributes.imgID,
-                            onChange: function( value ) {
-                                props.setAttributes( { imgID: value } );
-                            },
-                        } ),
-                        el( components.TextControl, {
-                            type: 'string',
-                            label: __( 'Image URL' ),
-                            value: props.attributes.imgURL,
-                            onChange: function( value ) {
-                                props.setAttributes( { imgURL: value } );
-                            },
-                        } ),
                     ),
                 ),              
                 // build editor html
                 el( 'div', { className: props.className },
-                    // el( editor.MediaUploadCheck , {},
-                        // el( editor.MediaUpload, {
-                        //     type: 'image',
-                        //     className: 'block__image',
-                        //     value: props.attributes.imgID,
-                        //     onSelect: onSelectImage,
-                            // render: function( obj ) {
-                            //     return  el( 'div', {} ,
-                            //         el( components.IconButton, {
-                            //             style: {padding: '4px'},
-                            //             className: props.attributes.imgID ? 'nen-button image-button' : 'button nen-button button-large',
-                            //             onClick: obj.open },
-                            //             ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
-                            //         ),
-                            //         ( props.attributes.imgID ? 
-                            //             el( Fragment , {} ,
-                            //                 el( 
-                            //                     components.Button, 
-                            //                     {
-                            //                         style: { marginRight: '8px' ,  marginTop: '4px' , marginBottom: '8px' , position: 'relative' },
-                            //                         isDefault: true,
-                            //                         onClick: obj.open
-                            //                     },
-                            //                     __( 'edit' , 'wtp' )
-                            //                 ),
-                            //                 el( 
-                            //                     components.Button, 
-                            //                     {
-                            //                         style: { marginRight: '8px' , marginTop: '4px' , marginBottom: '8px' ,  position: 'relative' },
-                            //                         isDefault: true,
-                            //                         onClick: onRemoveImage 
-                            //                     },
-                            //                     __( 'remove' , 'wtp' )
-                            //                 )
-                            //             )
-                            //     : null )
-                            //     );
-                            // }, 
-                        // }
-                    // ),
                     el( 
                         editor.MediaUpload, {
                             type: 'image',
@@ -153,12 +116,37 @@
                             onSelect: onSelectImage,
                             render: function( obj ) {
                                 return  el( 'div', {} ,
-                                    el( components.IconButton, {
-                                        style: {padding: '4px'},
-                                        className: props.attributes.imgID ? 'nen-button image-button' : 'button nen-button button-large',
+                                    ( props.attributes.imgID ? 
+                                        el( 'div', {
+                                            className: 'admin-buttons',
+                                        } ,
+                                            el( 
+                                                components.Button, 
+                                                {
+                                                    style: { marginRight: '8px', position: 'relative' },
+                                                    isDefault: true,
+                                                    onClick: obj.open
+                                                },
+                                                __( 'edit image' , 'wtp' )
+                                            ),
+                                            el( 
+                                                components.Button, 
+                                                {
+                                                    style: { marginRight: '8px', position: 'relative' },
+                                                    isDefault: true,
+                                                    onClick: onRemoveImage
+                                                },
+                                                __( 'remove image' , 'wtp' )
+                                            )
+                                        )
+                                    : null ),
+                                    el( 
+                                        components.Button, {
+                                        style: { padding: '0' },
+                                        className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
                                         onClick: obj.open },
                                         ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
-                                    ),
+                                    )
                                 );
                             }
                         }
