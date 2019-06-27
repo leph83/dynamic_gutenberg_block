@@ -3,15 +3,22 @@
     var el = element.createElement;
     var __ = i18n.__;
 
-    
-    var MediaUpload = editor.MediaUpload;
 
-
-
-    blocks.registerBlockType( 'wtp/callout-block', {
+    blocks.registerBlockType( 'wtp/default-block', {
         title: __( 'wtp block', 'wtp' ),
         icon: 'carrot',
-        category: 'common', /* can't change that afterwards? */
+        category: 'common',
+        styles: [
+            {
+                name: 'default',
+                label: __( 'Default' ),
+                isDefault: true
+            },
+            {
+                name: 'hero',
+                label: __( 'Hero' )
+            },
+        ],
 
         attributes: {
             imgID: {
@@ -27,11 +34,6 @@
             subtitle: {
                 type: 'string',
                 selector: '.block__subtitle',
-            },
-            ingredients: {
-                type: 'array',
-                source: 'children',
-                selector: '.ingredients',
             }
         },
         edit: function( props ) {
@@ -52,13 +54,6 @@
                 }); 
             }
 
-            // var onSelectImage = function( media ) {
-            //     return props.setAttributes( {
-            //         mediaURL: media.url,
-            //         mediaID: media.id,
-            //     } );
-            // };
-
             return [
                 // INSPECTOR
                 el( editor.InspectorControls, { key: 'inspector' }, 
@@ -68,50 +63,51 @@
                             initialOpen: true,
                         },
                         el( 
-                        editor.MediaUpload, {
-                            type: 'image',
-                            value: props.attributes.imgID,
-                            onSelect: onSelectImage,
-                            render: function( obj ) {
-                                return  el( 'div', {} ,
-                                    ( props.attributes.imgID ? 
-                                        el( 'div', {
-                                            className: 'admin-buttons',
-                                        } ,
-                                            el( 
-                                                components.Button, 
-                                                {
-                                                    style: { marginRight: '8px', position: 'relative' },
-                                                    isDefault: true,
-                                                    onClick: obj.open
-                                                },
-                                                __( 'edit image' , 'wtp' )
-                                            ),
-                                            el( 
-                                                components.Button, 
-                                                {
-                                                    style: { marginRight: '8px', position: 'relative' },
-                                                    isDefault: true,
-                                                    onClick: onRemoveImage
-                                                },
-                                                __( 'remove image' , 'wtp' )
+                            editor.MediaUpload, {
+                                type: 'image',
+                                value: props.attributes.imgID,
+                                onSelect: onSelectImage,
+                                render: function( obj ) {
+                                    return  el( 'div', {} ,
+                                        ( props.attributes.imgID ? 
+                                            el( 'div', {
+                                                className: 'admin-buttons',
+                                            } ,
+                                                el( 
+                                                    components.Button, 
+                                                    {
+                                                        style: { marginRight: '8px', position: 'relative' },
+                                                        isDefault: true,
+                                                        onClick: obj.open
+                                                    },
+                                                    __( 'edit image' , 'wtp' )
+                                                ),
+                                                el( 
+                                                    components.Button, 
+                                                    {
+                                                        style: { marginRight: '8px', position: 'relative' },
+                                                        isDefault: true,
+                                                        onClick: onRemoveImage
+                                                    },
+                                                    __( 'remove image' , 'wtp' )
+                                                )
                                             )
+                                        : null ),
+                                        el( 
+                                            components.Button, {
+                                            style: props.attributes.imgID ? { padding: '0' } : {  },
+                                            className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
+                                            onClick: obj.open },
+                                            ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
                                         )
-                                    : null ),
-                                    el( 
-                                        components.Button, {
-                                        style: { padding: '0' },
-                                        className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
-                                        onClick: obj.open },
-                                        ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
-                                    )
-                                );
+                                    );
+                                }
                             }
-                        }
-                    ),
+                        ),
                     ),
                     // text
-                    el( components.PanelBody, {
+                    el( 
+                        components.PanelBody, {
                             title: __( 'Text' ),
                             initialOpen: false,
                         },
@@ -144,7 +140,7 @@
                                 return  el( 'div', {} ,
                                     el( 
                                         components.Button, {
-                                        style: { padding: '0' },
+                                        style: props.attributes.imgID ? { padding: '0' } : {  },
                                         className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
                                         onClick: obj.open },
                                         ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
@@ -157,8 +153,8 @@
                         editor.RichText, {
                             tagName: 'h2',
                             inline: true,
-                            placeholder: __( 'title…', 'wtp' ),
                             className: 'block__title',
+                            placeholder: __( 'title…', 'wtp' ),
                             value: attributes.title,
                             onChange: function( value ) {
                                 props.setAttributes( { title: value } );
@@ -177,16 +173,6 @@
                             },
                         }
                     )
-                    // el( editor.RichText, {
-                    //     tagName: 'ul',
-                    //     multiline: 'li',
-                    //     placeholder: __( 'Write a list of ingredients…', 'wtp' ),
-                    //     value: attributes.ingredients,
-                    //     onChange: function( value ) {
-                    //         props.setAttributes( { ingredients: value } );
-                    //     },
-                    //     className: 'ingredients',
-                    // } )
                 )
             ];
         },

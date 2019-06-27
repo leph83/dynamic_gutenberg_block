@@ -34,12 +34,12 @@ function wtp_render_callback( $attributes ){
     $imgID = $attributes['imgID'] ?? false;
     $imageSrc = wp_get_attachment_image_src($imgID)[0] ?? false;
 
-
     $image = '<img src="'.$imageSrc.'">';
 
     return '
     	<div style="color: '.$text_color.';background-color: '.$bg_color.'">
     		'.$title.'
+            '.$subtitle.'
             '.$image.'
 		</div>
 	';
