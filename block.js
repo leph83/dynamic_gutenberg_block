@@ -5,7 +5,7 @@
 
     var Richtext = editor.RichText;
     var Mediaupload = editor.MediaUpload;
-    var Selectcontrol = editor.SelectControl;
+    var SelectControl = editor.SelectControl;
 
     blocks.registerBlockType( 'wtp/default-block', {
         title: __( 'wtp block', 'wtp' ),
@@ -62,23 +62,14 @@
                             title: __('Style'),
                             initialOpen: true,
                         },
-                        // el( 
-                        //     select,
+                        // el( SelectControl,
                         //     {
-                        //         type: 'string',
-                        //         label: __( 'Style' ),
-                        //         value: props.attributes.style,
-                        //         onChange: function( value ) {
-                        //             props.setAttributes( { style: value } );
-                        //         },
-                        //     },
-                        //     el(
-                        //         option,
-                        //         {
-                        //             type: 'string',
-                        //             value: props.attributes.style,
-                        //         }
-                        //     ),
+                        //         label: 'Select Control',
+                        //         options : [
+                        //             { label: 'Option 1', value: 'val_1' },
+                        //             { label: 'Option 2', value: 'val_2' },
+                        //         ],
+                        //     }
                         // ),
                     ),
                     // MEDIA
@@ -139,24 +130,6 @@
                             title: __( 'Text' ),
                             initialOpen: false,
                         },
-                        el( components.TextControl,
-                        {
-                            type: 'string',
-                            label: __( 'Title' ),
-                            value: props.attributes.title,
-                            onChange: function( value ) {
-                                props.setAttributes( { title: value } );
-                            },
-                        } ),
-                        el( components.TextControl, 
-                        {
-                            type: 'string',
-                            label: __( 'Subtitle' ),
-                            value: props.attributes.subtitle,
-                            onChange: function( value ) {
-                                props.setAttributes( { subtitle: value } );
-                            },
-                        } ),
                     ),
                 ),
                 // CONTENT ARE
@@ -198,11 +171,11 @@
                     el(
                         Richtext,
                         {
-                            key: 'richtext',
                             tagName: 'h2',
                             inline: true,
                             className: 'block__title',
                             placeholder: __( 'title…', 'wtp' ),
+                            formattingControls: [  ], // finally found a way to adjust this
                             value: attributes.title,
                             onChange: function( value ) {
                                 props.setAttributes( { title: value } );
@@ -216,6 +189,7 @@
                             inline: true,
                             className: 'block__subtitle',
                             placeholder: __( 'subtitle…', 'wtp' ),
+                            formattingControls: [  ], // finally found a way to adjust this
                             value: attributes.subtitle,
                             onChange: function( value ) {
                                 props.setAttributes( { subtitle: value } );
