@@ -3,24 +3,19 @@
     var el = element.createElement;
     var __ = i18n.__;
 
+    var Richtext = editor.RichText;
+    var Mediaupload = editor.MediaUpload;
+    var Selectcontrol = editor.SelectControl;
 
     blocks.registerBlockType( 'wtp/default-block', {
         title: __( 'wtp block', 'wtp' ),
         icon: 'carrot',
         category: 'common',
-        styles: [
-            {
-                name: 'default',
-                label: __( 'Default' ),
-                isDefault: true
-            },
-            {
-                name: 'hero',
-                label: __( 'Hero' )
-            },
-        ],
 
         attributes: {
+            style: {
+                type: 'string',
+            },
             imgID: {
                 type: 'number',
             },
@@ -47,7 +42,7 @@
                     imgURL: media.url 
                 } );
             }
-            
+
             var onRemoveImage = function (media) {
                 return props.setAttributes( {
                     imgURL: null, 
@@ -57,18 +52,44 @@
 
             return [
                 // INSPECTOR
-                el( 
-                    editor.InspectorControls, 
-                    { key: 'inspector' }, 
-                    // image or media
+                el(
+                    editor.InspectorControls,
+                    { key: 'inspector' },
+                    // STYLE
+                    el(
+                        components.PanelBody,
+                        {
+                            title: __('Style'),
+                            initialOpen: true,
+                        },
+                        // el( 
+                        //     select,
+                        //     {
+                        //         type: 'string',
+                        //         label: __( 'Style' ),
+                        //         value: props.attributes.style,
+                        //         onChange: function( value ) {
+                        //             props.setAttributes( { style: value } );
+                        //         },
+                        //     },
+                        //     el(
+                        //         option,
+                        //         {
+                        //             type: 'string',
+                        //             value: props.attributes.style,
+                        //         }
+                        //     ),
+                        // ),
+                    ),
+                    // MEDIA
                     el( 
-                        components.PanelBody, 
+                        components.PanelBody,
                         {
                             title: __( 'Media' ),
                             initialOpen: true,
                         },
                         el( 
-                            editor.MediaUpload, 
+                            Mediaupload,
                             {
                                 type: 'image',
                                 value: props.attributes.imgID,
@@ -111,14 +132,14 @@
                             }
                         ),
                     ),
-                    // text
-                    el( 
-                        components.PanelBody, 
+                    // TEXT
+                    el(
+                        components.PanelBody,
                         {
                             title: __( 'Text' ),
                             initialOpen: false,
                         },
-                        el( components.TextControl, 
+                        el( components.TextControl,
                         {
                             type: 'string',
                             label: __( 'Title' ),
@@ -137,33 +158,47 @@
                             },
                         } ),
                     ),
-                ),              
-                // build editor html
+                ),
+                // CONTENT ARE
                 el( 
-                    'div', 
-                    { className: props.className },
+                    'div',
+                    { 
+                        className: props.className + '  block',
+                    },
                     el( 
-                        editor.MediaUpload, 
+                        Mediaupload,
                         {
                             type: 'image',
                             value: props.attributes.imgID,
                             onSelect: onSelectImage,
                             render: function( obj ) {
-                                return  el( 'div', {} ,
+                                return el( 
+                                    'div', 
+                                    {
+                                        className: 'block__image',
+                                    },
                                     el( 
-                                        components.Button, {
+                                        components.Button, 
+                                        {
                                         style: props.attributes.imgID ? { padding: '0' } : {  },
                                         className: props.attributes.imgID ? 'block__image' : 'is-button is-default',
                                         onClick: obj.open },
-                                        ! props.attributes.imgID ? __( 'Upload Image' ) : el( 'img', { src: props.attributes.imgURL } )
+                                        ! props.attributes.imgID ? __( 'Upload Image' ) : ''
+                                    ),
+                                    el(
+                                        'img',
+                                        {
+                                            src: props.attributes.imgURL,
+                                        }
                                     )
                                 );
                             }
                         }
                     ),
                     el(
-                        editor.RichText, 
+                        Richtext,
                         {
+                            key: 'richtext',
                             tagName: 'h2',
                             inline: true,
                             className: 'block__title',
@@ -172,10 +207,10 @@
                             onChange: function( value ) {
                                 props.setAttributes( { title: value } );
                             },
-                        } 
+                        }
                     ),
                     el(
-                        editor.RichText, 
+                        Richtext,
                         {
                             tagName: 'h3',
                             inline: true,
@@ -192,8 +227,6 @@
         },
 
         save: function( props ) {
-            var attributes = props.attributes;
-
             return null
         },
     } );

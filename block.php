@@ -26,8 +26,10 @@ function wtp_register_block_assets() {
 	) );
 }
 
+function wtp_render_callback( $attributes, $styles ){
+    $style = $attributes['styles'] ?? false;
 
-function wtp_render_callback( $attributes ){
+
 	$bg_color = $attributes['backgroundColor'] ?? false;
 	$text_color = $attributes['textColor'] ?? false;
     $title = $attributes['title'] ?? false;
