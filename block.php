@@ -26,9 +26,8 @@ function wtp_register_block_assets() {
 	) );
 }
 
-function wtp_render_callback( $attributes, $styles ){
+function wtp_render_callback( $attributes, $innerblocks ){
     $style = $attributes['styles'] ?? false;
-
 
 	$bg_color = $attributes['backgroundColor'] ?? false;
 	$text_color = $attributes['textColor'] ?? false;
@@ -36,14 +35,21 @@ function wtp_render_callback( $attributes, $styles ){
     $subtitle = $attributes['subtitle'] ?? false;
     $imgID = $attributes['imgID'] ?? false;
     $imageSrc = wp_get_attachment_image_src($imgID)[0] ?? false;
+    $style = $attributes['style'] ?? false;
+    $style = 'hero';
 
     $image = '<img src="'.$imageSrc.'">';
 
-    return '
-    	<div style="color: '.$text_color.';background-color: '.$bg_color.'">
-    		'.$title.'
-            '.$subtitle.'
-            '.$image.'
-		</div>
-	';
+
+    $data_images = false;
+    $id = false;
+    $images = false;
+    $heading = false;
+    $description = false;
+    $links = false;
+
+    $args['title'] = $title;
+    $args['subtitle'] = $subtitle;
+
+    return $title . $innerblocks;
 }

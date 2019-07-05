@@ -5,7 +5,22 @@
 
     var Richtext = editor.RichText;
     var Mediaupload = editor.MediaUpload;
-    var SelectControl = editor.SelectControl;
+
+    var SelectControl = components.SelectControl;
+
+    // const {
+    //     TextControl,
+    //     CheckboxControl,
+    //     RadioControl,
+    //     SelectControl,
+    //     TextareaControl,
+    //     ToggleControl,
+    //     RangeControl,
+    //     Panel,
+    //     PanelBody,
+    //     PanelRow
+    // } = components;
+
 
     blocks.registerBlockType( 'wtp/default-block', {
         title: __( 'wtp block', 'wtp' ),
@@ -29,8 +44,20 @@
             subtitle: {
                 type: 'string',
                 selector: '.block__subtitle',
+            },
+            description: {
+                type: 'string',
+                selector: '.block__description',
+            },
+
+            isActive: {
+                type: 'string',
             }
         },
+
+
+
+
 
         edit: function( props ) {
             var attributes = props.attributes;
@@ -62,15 +89,19 @@
                             title: __('Style'),
                             initialOpen: true,
                         },
-                        // el( SelectControl,
-                        //     {
-                        //         label: 'Select Control',
-                        //         options : [
-                        //             { label: 'Option 1', value: 'val_1' },
-                        //             { label: 'Option 2', value: 'val_2' },
-                        //         ],
-                        //     }
-                        // ),
+                        el( SelectControl,
+                            {
+                                label: 'Style',
+                                options : [
+                                    { label: 'Option 1', value: 'val_1' },
+                                    { label: 'Option 2', value: 'val_2' },
+                                ],
+                                onChange: function( value ) {
+                                    props.setAttributes( { style: value } );
+                                },
+                                value: props.attributes.style
+                            }
+                        ),
                     ),
                     // MEDIA
                     el( 
@@ -195,13 +226,31 @@
                                 props.setAttributes( { subtitle: value } );
                             },
                         }
-                    )
+                    ),
+                    el( 
+                        editor.InnerBlocks,
+                        {} 
+                    ),
+                    el(
+                        Richtext,
+                        {
+                            tagName: 'h3',
+                            inline: true,
+                            className: 'block__subtitle',
+                            placeholder: __( 'subtitle…', 'wtp' ),
+                            formattingControls: [  ], // finally found a way to adjust this
+                            value: attributes.subtitle,
+                            onChange: function( value ) {
+                                props.setAttributes( { subtitle: value } );
+                            },
+                        }
+                    ),
                 )
             ];
         },
 
         save: function( props ) {
-            return null
+            return el( editor.InnerBlocks.Content , {} ) ;
         },
     } );
 
